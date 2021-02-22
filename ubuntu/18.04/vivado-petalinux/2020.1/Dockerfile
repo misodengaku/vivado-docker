@@ -17,7 +17,7 @@ RUN dpkg --add-architecture i386 && \
                                                       tofrodos iproute2 gawk net-tools libncurses5-dev tftp tftpd-hpa zlib1g-dev \
                                                       libssl-dev flex bison libselinux1 diffstat xvfb chrpath xterm libtool socat \
                                                       autoconf texinfo gcc-multilib libsdl1.2-dev libglib2.0-dev zlib1g:i386 wget \
-                                                      libtool-bin locales cpio python3 libgtk2.0-0 rlwrap && \
+                                                      libtool-bin locales cpio python3 libgtk2.0-0 rlwrap rsync && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
