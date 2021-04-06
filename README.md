@@ -44,7 +44,7 @@ docker build -t vivado:<container tag> <Dockerfile directory>
 or
 
 ```bash
-./build.sh <distribution> <distribution version> <package> <version> <type>
+./build.sh <distribution> <distribution version> <package> <version>
 ```
 
 #### for example
@@ -56,7 +56,8 @@ docker build -t vivado:2019.1-ubuntu18.04 ubuntu/18.04/vivado/2019.1/
 or
 
 ```bash
-./build.sh ubuntu 18.04 vivado 2019.1 vnc
+./build.sh ubuntu 18.04 vivado 2019.1
+./build.sh ubuntu 18.04 vivado-petalinux 2020.1
 ```
 
 ## Run Using X11
