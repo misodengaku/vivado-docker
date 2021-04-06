@@ -87,7 +87,7 @@ xilinx_docker() {
 	remote="${remote/\/home\/vivado/\/home\/vitis}"
 	program_version="${program_version/vivado/vitis}"
     fi
-    
+
     # Format the local mount point
     if [[ "$local" != "" ]]; then
         local local_mount="-v${local}:${remote}"
@@ -98,9 +98,9 @@ xilinx_docker() {
     # Format the image used
     if [[ -z ${image} ]]; then
         if [[ "${registry}" == *"docker.io"* ]]; then
-            image=${registry}/aperloff/vivado-docker:${os}_${program_version}_x11
+            image=${registry}/aperloff/vivado-docker:${os}_${program_version}
         elif [[ "${registry}" == *"gitlab-registry.cern.ch"* ]]; then
-            image=${registry}/aperloff/vivado-docker/${os}_${program_version}_x11:latest
+            image=${registry}/aperloff/vivado-docker/${os}_${program_version}:latest
         fi
     fi
 
