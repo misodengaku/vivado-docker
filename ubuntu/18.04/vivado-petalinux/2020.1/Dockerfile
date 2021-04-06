@@ -49,15 +49,6 @@ RUN chmod +x /opt/Xilinx_Unified_*/xsetup && \
     rm -rf /opt/Xilinx_Unified_*/ && \
     rm -rf /tmp/.X*
 
-
-# Apply Vivado 2018.2.1 update
-# ADD files/Xilinx_Vivado_SDx_Update_2018.2.1_0726_1815.tar.gz /opt/
-# RUN cat /opt/install_config.txt.template | \
-#     sed -e "s/%%EDITION%%/${VIVADO_EDITION}/" -e "s/Modules=%%MODULES%%//" > /opt/update_config.txt && \
-#     /opt/Xilinx_Vivado_*/xsetup --agree XilinxEULA,3rdPartyEULA,WebTalkTerms --batch Install --config /opt/update_config.txt && \
-#     rm -rf /opt/Xilinx_Vivado_*/ && \
-#     rm -rf /tmp/.X*
-
 # Install board_files of Avnet and Digilent
 RUN wget https://github.com/Avnet/bdf/archive/master.zip -O avnet.zip && \
     wget https://github.com/Digilent/vivado-boards/archive/master.zip -O digilent.zip && \
@@ -66,7 +57,6 @@ RUN wget https://github.com/Avnet/bdf/archive/master.zip -O avnet.zip && \
     cp -r vivado-boards-master/new/* /opt/Xilinx/Vivado/2020.1/data/boards/board_files/ && \
     cp -r bdf-master/* /opt/Xilinx/Vitis/2020.1/data/boards/board_files/ && \
     cp -r vivado-boards-master/new/* /opt/Xilinx/Vitis/2020.1/data/boards/board_files/
-    # cp -r /opt/Xilinx/Vivado/2020.1/data/boards/board_files/* /opt/Xilinx/Vitis/2020.1/data/boards/board_files/ # can't copy hardlink
 
 # Modify environments
 RUN mkdir -p /home/vivado/.vnc && \
