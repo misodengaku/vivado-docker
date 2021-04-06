@@ -1,4 +1,4 @@
-build_sl7_vitis2019-2_x11:
+build_sl7_vitis2019-2:
     extends: .job_template
     tags:
         - cu-lnxfarm327-docker-privileged-xl
@@ -7,9 +7,8 @@ build_sl7_vitis2019-2_x11:
         OS_VERSION: "7"
         SERIES: "vitis"
         VERSION: "2019.2"
-        VIEW: x11
 
-build_sl7_vitis2019-2_x11_dockerhub:
+build_sl7_vitis2019-2_dockerhub:
     extends: .job_template
     tags:
         - cu-lnxfarm327-docker-privileged-xl
@@ -21,6 +20,5 @@ build_sl7_vitis2019-2_x11_dockerhub:
         OS: sl
         OS_VERSION: "7"
         SERIES: "vitis"
-        TO: "${CI_REGISTRY_IMAGE}/vivado-docker:${OS}${OS_VERSION}_${SERIES}${VERSION}_${VIEW}"
+        TO: "${CI_REGISTRY_IMAGE}/vivado-docker:${OS}${OS_VERSION}_${SERIES}${VERSION}"
         VERSION: "2019.2"
-        VIEW: x11

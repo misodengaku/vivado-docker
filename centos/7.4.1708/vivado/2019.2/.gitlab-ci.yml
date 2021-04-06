@@ -1,13 +1,12 @@
-build_centos7-4-1708_vivado2019-2_x11:
+build_centos7-4-1708_vivado2019-2:
     extends: .job_template
     variables:
         OS: centos
         OS_VERSION: "7.4.1708"
         SERIES: "vivado"
         VERSION: "2019.2"
-        VIEW: x11
 
-build_centos7-4-1708_vivado2019-2_x11_dockerhub:
+build_centos7-4-1708_vivado2019-2_dockerhub:
     extends: .job_template
     variables:
         CI_REGISTRY: https://index.docker.io/v1/
@@ -17,6 +16,5 @@ build_centos7-4-1708_vivado2019-2_x11_dockerhub:
         OS: centos
         OS_VERSION: "7.4.1708"
         SERIES: "vivado"
-        TO: "${CI_REGISTRY_IMAGE}/vivado-docker:${OS}${OS_VERSION}_${SERIES}${VERSION}_${VIEW}"
+        TO: "${CI_REGISTRY_IMAGE}/vivado-docker:${OS}${OS_VERSION}_${SERIES}${VERSION}"
         VERSION: "2019.2"
-        VIEW: x11

@@ -1,9 +1,9 @@
-# Kaniko is the recommended method for running Docker-builds as of May 2019. 
+# Kaniko is the recommended method for running Docker-builds as of May 2019.
 # See https://docs.gitlab.com/ee/ci/docker/using_kaniko.html for GitLab's documentation.
 
 # Variables -------------------------------------------------------------------
 variables:
-    PROJ_NAME: '${SERIES}-$CI_COMMIT_REF_NAME-${OS}${OS_VERSION}-${VERSION}-${VIEW}'
+    PROJ_NAME: '${SERIES}-$CI_COMMIT_REF_NAME-${OS}${OS_VERSION}-${VERSION}'
 
 
 # Stages ----------------------------------------------------------------------
@@ -23,16 +23,16 @@ stages:
 #        - "*.md"
     tags:
         - docker-privileged-xl
-    image: 
+    image:
         # We recommend using the CERN version of the Kaniko image: gitlab-registry.cern.ch/ci-tools/docker-image-builder
         name: gitlab-registry.cern.ch/ci-tools/docker-image-builder
         entrypoint: [""]
     variables:
         DOCKER_DRIVER: overlay2
         NO_CACHE: "true"
-        CONTEXT_DIR: "${OS}/${OS_VERSION}/${SERIES}/${VERSION}/${VIEW}/"
+        CONTEXT_DIR: "${OS}/${OS_VERSION}/${SERIES}/${VERSION}/"
         FROM: "${OS}:${OS_VERSION}"
-        TO: "${CI_REGISTRY_IMAGE}/${OS}${OS_VERSION}_${SERIES}${VERSION}_${VIEW}:latest"
+        TO: "${CI_REGISTRY_IMAGE}/${OS}${OS_VERSION}_${SERIES}${VERSION}:latest"
     script:
         # Prepare Kaniko configuration file
         - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
@@ -46,11 +46,11 @@ stages:
 
 # Jobs/Includes ---------------------------------------------------------------
 include:
-    - local: '/centos/7.4.1708/vivado/2019.2/x11/.gitlab-ci.yml'
-#    - local: '/centos/7.7.1908/vivado/2019.2/x11/.gitlab-ci.yml'
-#    - local: '/sl/7/vivado/2018.2/x11/.gitlab-ci.yml'
-#    - local: '/sl/7/vivado/2019.1/x11/.gitlab-ci.yml'
-#    - local: '/sl/7/vivado/2019.2/x11/.gitlab-ci.yml'
-#    - local: '/sl/7/vitis/2019.2/x11/.gitlab-ci.yml'
-#    - local: '/sl/7/vitis/2020.1/x11/.gitlab-ci.yml'
-#    - local: '/ubuntu/18.04/vivado/2019.1/vnc/.gitlab-ci.yml'
+    - local: '/centos/7.4.1708/vivado/2019.2/.gitlab-ci.yml'
+#    - local: '/centos/7.7.1908/vivado/2019.2/.gitlab-ci.yml'
+#    - local: '/sl/7/vivado/2018.2/.gitlab-ci.yml'
+#    - local: '/sl/7/vivado/2019.1/.gitlab-ci.yml'
+#    - local: '/sl/7/vivado/2019.2/.gitlab-ci.yml'
+#    - local: '/sl/7/vitis/2019.2/.gitlab-ci.yml'
+#    - local: '/sl/7/vitis/2020.1/.gitlab-ci.yml'
+#    - local: '/ubuntu/18.04/vivado/2019.1/.gitlab-ci.yml'
