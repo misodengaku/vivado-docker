@@ -1,0 +1,56 @@
+# Kaniko is the recommended method for running Docker-builds as of May 2019. 
+# See https://docs.gitlab.com/ee/ci/docker/using_kaniko.html for GitLab's documentation.
+
+# Variables -------------------------------------------------------------------
+variables:
+    PROJ_NAME: '${SERIES}-$CI_COMMIT_REF_NAME-${OS}${OS_VERSION}-${VERSION}-${VIEW}'
+
+
+# Stages ----------------------------------------------------------------------
+stages:
+    - build
+
+# Job templates ---------------------------------------------------------------
+.job_template:
+    stage: build
+#    only:
+#      changes:
+#        - $CONTEXT_DIR/Dockerfile
+#        - $CONTEXT_DIR/**/*
+#        - web
+#    except:
+#      changes:
+#        - "*.md"
+    tags:
+        - docker-privileged-xl
+    image: 
+        # We recommend using the CERN version of the Kaniko image: gitlab-registry.cern.ch/ci-tools/docker-image-builder
+        name: gitlab-registry.cern.ch/ci-tools/docker-image-builder
+        entrypoint: [""]
+    variables:
+        DOCKER_DRIVER: overlay2
+        NO_CACHE: "true"
+        CONTEXT_DIR: "${OS}/${OS_VERSION}/${SERIES}/${VERSION}/${VIEW}/"
+        FROM: "${OS}:${OS_VERSION}"
+        TO: "${CI_REGISTRY_IMAGE}/${OS}${OS_VERSION}_${SERIES}${VERSION}_${VIEW}:latest"
+    script:
+        # Prepare Kaniko configuration file
+        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+        # Build and push the image from the Dockerfile at the root of the project.
+        # To push to a specific docker tag, amend the --destination parameter, e.g. --destination $CI_REGISTRY_IMAGE:$CI_BUILD_REF_NAME
+        # See https://docs.gitlab.com/ee/ci/variables/predefined_variables.html#variables-reference for available variables
+        - df -ih
+        - ls -lh $CI_PROJECT_DIR/$CONTEXT_DIR/
+        - /kaniko/executor --context $CI_PROJECT_DIR/$CONTEXT_DIR --dockerfile $CI_PROJECT_DIR/$CONTEXT_DIR/Dockerfile --destination $TO --single-snapshot --cleanup --build-arg VERSION=${VERSION}
+        - df -ih
+
+# Jobs/Includes ---------------------------------------------------------------
+include:
+    - local: '/centos/7.4.1708/vivado/2019.2/x11/.gitlab-ci.yml'
+#    - local: '/centos/7.7.1908/vivado/2019.2/x11/.gitlab-ci.yml'
+#    - local: '/sl/7/vivado/2018.2/x11/.gitlab-ci.yml'
+#    - local: '/sl/7/vivado/2019.1/x11/.gitlab-ci.yml'
+#    - local: '/sl/7/vivado/2019.2/x11/.gitlab-ci.yml'
+#    - local: '/sl/7/vitis/2019.2/x11/.gitlab-ci.yml'
+#    - local: '/sl/7/vitis/2020.1/x11/.gitlab-ci.yml'
+#    - local: '/ubuntu/18.04/vivado/2019.1/vnc/.gitlab-ci.yml'
