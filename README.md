@@ -2,12 +2,14 @@
 
 For many reasons having Xilinx Vivado/Vivado HLS installed in a docker image can be useful. This package is setup to build docker images with various setups. The configurations for the docker builds can be found in the table below:
 
-| **Linux Flavor** | **Vivado Version** | **X11** |   **VNC**   |
-| ---------------- | ------------------ | ------- | ----------- |
-| Ubuntu 18.04     | 2019.1             | Yes     | Yes         |
-| SL7              | 2018.2             | Yes     | Unsupported |
-| SL7              | 2019.1             | Yes     | Unsupported |
-| SL7              | 2019.2             | Yes     | Unsupported |
+| **Linux Flavor** | **Vivado Version** | **Petalinux** | **X11** |   **VNC**   |
+| ---------------- | ------------------ | ------------- | ------- | ----------- |
+| Ubuntu 18.04     | 2020.1             | Yes(2020.1)   | Yes     | Yes         |
+| Ubuntu 18.04     | 2019.1             | No            | Yes     | Yes         |
+| Ubuntu 16.04     | 2018.2             | Yes(2018.2)   | Yes     | Yes         |
+| SL7              | 2018.2             | No            | Yes     | Unsupported |
+| SL7              | 2019.1             | No            | Yes     | Unsupported |
+| SL7              | 2019.2             | No            | Yes     | Unsupported |
 
 The Ubuntu version features both X11 and VNC and is generally less secure. The Scientific Linux (SL) container was built with security in mind. It is meant to conform with the security policies laid out by Fermi National Accelerator Laboratory (FNAL).
 
@@ -31,7 +33,7 @@ cd vivado-docker
 
 ### Download Vivado
 
-Download Vivado for linux from Xilinx and locate in the `downloads/` directory. (ex. `downloads/Xilinx_Vivado_SDK_2019.1_0524_1430.tar.gz` )
+Download Vivado for linux from Xilinx and locate in the `<distribution>/<distribution version>/<package>/<version>/files` directory. (ex. `ubuntu/18.04/vivado/2019.1/files/Xilinx_Vivado_SDK_2019.1_0524_1430.tar.gz` )
 
 ### Build
 
@@ -39,7 +41,7 @@ Download Vivado for linux from Xilinx and locate in the `downloads/` directory. 
 docker build -t vivado:<container tag> <Dockerfile directory>
 ```
 
-or 
+or
 
 ```bash
 ./build.sh <distribution> <distribution version> <package> <version> <type>
@@ -48,10 +50,10 @@ or
 #### for example
 
 ```bash
-docker build -t vivado:2019.1-ubuntu18.04-vnc ubuntu/18.04/vivado/2019.1/vnc
+docker build -t vivado:2019.1-ubuntu18.04 ubuntu/18.04/vivado/2019.1/
 ```
 
-or 
+or
 
 ```bash
 ./build.sh ubuntu 18.04 vivado 2019.1 vnc
@@ -111,8 +113,9 @@ You will be asked to enter a 6+ character password for the VNC server. Then on t
 open vnc://127.0.0.1:5900
 ```
 
-## CU Specific Running Instructions
-In order to access the CU Vivado license it may be necessary to set an environment variable when running the docker container using ```-e XILINXD_LICENSE_FILE=2100@torreys.colorado.edu:27016@ecee-flexlm.colorado.edu```
+## Vivado License
+In order to access the Vivado license it may be necessary to set an environment variable when running the docker container using ```-e XILINXD_LICENSE_FILE=...```.
+
 
 ## Command Line Access to a Currently Running Container
 If you need to access the command line for a container which is currently running you can use the following command to open up a bash prompt:
