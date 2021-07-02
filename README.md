@@ -51,6 +51,7 @@ or
 
 ```bash
 docker build -t vivado:2019.1-ubuntu18.04 ubuntu/18.04/vivado/2019.1/
+docker build -t vivado-petalinux:2020.1-ubuntu18.04 ubuntu/18.04/vivado-petalinux/2020.1/
 ```
 
 or
@@ -60,10 +61,20 @@ or
 ./build.sh ubuntu 18.04 vivado-petalinux 2020.1
 ```
 
-## Run Using X11
+### Run
+#### Quickstart
+```bash
+# Launch Vivado GUI
+docker run vivado-petalinux:2020.1-ubuntu18.04
+
+# Build using Makefile in the project directory
+docker run -it -e USER_ID=`id -u` -e GROUP_ID=`id -g` -w /home/example/vivado-project-dir -v /home/example/vivado-project-dir:/home/example/vivado-project-dir vivado-petalinux:2020.1-ubuntu18.04 bash -ic \"make all\"
+```
+
+#### Run Using X11
 This is my preferred way of accessing the remote windows. For one, it requires fewer additions to the base operating system. Additionally, it's easier to resize the windows, not having to set the geometry when running the container. That being said, some care must be taken to secure the connection between the remote system and the localhost.
 
-### Directly Connect Host and Remote
+#### Directly Connect Host and Remote
 These directions will assume that the user is running OSX and has XQuartz installed. Settings for other host systems and/or X11 window programs are left to the user to figure out.
 
 This next step only has to be performed once for the host system. We will need to make sure that XQuartz allows connections from network/remote clients. Open the menu at ```XQuartz > Preferences...``` and click on the ```Security``` tab. Make sure that the check box next to "Allow connections from network clients" is selected. You will need to restart XQuartz if this option wasn't already enabled.
@@ -76,7 +87,7 @@ docker run --rm -it --net=host -e DISPLAY=host.docker.internal:0 vivado:<contain
 ```
 
 
-### Use the System IP Address
+#### Use the System IP Address
 This is a less secure method of connecting the remote program to the X11 system on the host. This is because you are allowing the remote system to access the internet and then connect to your system's external IP address. While the xhost command does limit the connections to just that one address, this is still note the best practice and may get you booted off the network at FNAL.
 
 ```bash
@@ -87,13 +98,13 @@ docker run --rm -it -e DISPLAY=$IP:0 -v /tmp/.X11-unix:/tmp/.X11-unix vivado:<co
 
 **Note:** I found that at one point I needed to reset my xhost list by turning off the xhost filtering and then turning it back on ```xhost <-/+>```. At FNAL, remember to disconnect from the internet before you do this because it will be seen as opening up a hole in your firewall and get you blocked from the network.
 
-### Alternate Entrypoint
+#### Alternate Entrypoint
 To override the entrypoint, you need to use the ```--entrypoint``` option. You may want to do this, for instance, if you want to open a bash terminal rather than Vivado directly.
 ```bash
 docker run --rm -it -e DISPLAY=$IP:0 -v /tmp/.X11-unix:/tmp/.X11-unix --entrypoint /bin/bash vivado:<container tag>
 ```
 
-### xilinx_docker Bash Function
+#### xilinx_docker Bash Function
 Inside the file ```.xilinx_docker``` there is a bash function named xilinx_docker. This function is meant to help the user quickly spin up a one of these docker containers. Rather than having to remember the entire docker run command and the variations for each entrypoint, this function provides a much simpler interface. It is based on the "Direct Connection" method mentioned above. I find it useful to source the ```.xilinx_docker``` file from within my login script.
 
 For a complete set of directions on how to use this utility, see the functions help message. Simply use:
@@ -101,7 +112,7 @@ For a complete set of directions on how to use this utility, see the functions h
 xilinx_docker -h
 ```
 
-## Run Using VNC
+### Run Using VNC
 VNC is not my favorite way to interact with remote programs. Resizing of windows always seems haphazard. That being said, the Ubuntu version of this container was built with VNC available. To run it, use the command:
 
 ```

@@ -112,9 +112,12 @@ COPY --from=Install /home/vivado /home/vivado
 COPY --from=Install /tmp/.X11-unix /tmp/.X11-unix
 
 COPY files/entrypoint.sh /opt/entrypoint.sh
+COPY files/cmd.sh /opt/cmd.sh
 
 ENV DISPLAY :0
 ENV GEOMETRY 1920x1200
 EXPOSE 5900
 
-CMD ["sh", "/opt/entrypoint.sh"]
+USER root
+ENTRYPOINT [ "sh", "/opt/entrypoint.sh" ]
+CMD ["/opt/cmd.sh"]
