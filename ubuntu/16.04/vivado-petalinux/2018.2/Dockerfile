@@ -112,4 +112,10 @@ ENV DISPLAY :0
 ENV GEOMETRY 1920x1200
 EXPOSE 5900
 
-CMD ["sh", "/opt/entrypoint.sh"]
+USER root
+
+COPY files/entrypoint.sh /opt/entrypoint.sh
+COPY files/cmd.sh /opt/cmd.sh
+
+ENTRYPOINT [ "sh", "/opt/entrypoint.sh" ]
+CMD ["/opt/cmd.sh"]

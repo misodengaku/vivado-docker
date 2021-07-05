@@ -1,7 +1,6 @@
 FROM ubuntu:18.04
 
 COPY files/install_config.txt.template /opt/install_config.txt.template
-COPY files/entrypoint.sh /opt/entrypoint.sh
 
 ENV VIVADO_VERSION=2019.1
 
@@ -24,8 +23,8 @@ RUN mkdir ~/.vnc \
 RUN chmod +x /opt/Xilinx_Vivado_*/xsetup \
     && vncserver :0 \
     && cat /opt/install_config.txt.template | \
-       sed -e 's/%%EDITION%%/${VIVADO_EDITION}/' \
-           -e 's/%%MODULES%%/${VIVADO_MODULES}/' \
+       sed -e "s/%%EDITION%%/${VIVADO_EDITION}/" \
+           -e "s/%%MODULES%%/${VIVADO_MODULES}/" \
        > /opt/install_config.txt \
     && cat /opt/install_config.txt \
     && /opt/Xilinx_Vivado_*/xsetup --agree XilinxEULA,3rdPartyEULA,WebTalkTerms --batch Install --config /opt/install_config.txt \
@@ -34,7 +33,7 @@ RUN chmod +x /opt/Xilinx_Vivado_*/xsetup \
 
 RUN useradd -ms /bin/bash vivado \
     && mkdir -p /home/vivado/.vnc \
-    && echo "29g8/XJ6FFg=" | base64 -d > /home/vivado/passwd && chmod 600 /home/vivado/passwd \ 
+    && echo "29g8/XJ6FFg=" | base64 -d > /home/vivado/passwd && chmod 600 /home/vivado/passwd \
     && echo "source /opt/Xilinx/Vivado/${VIVADO_VERSION}/settings64.sh" >> /home/vivado/.bashrc
 
 COPY files/xstartup /home/vivado/.vnc/xstartup
@@ -48,4 +47,11 @@ ENV DISPLAY :0
 ENV GEOMETRY 1920x1200
 
 EXPOSE 5900
-ENTRYPOINT ["/opt/entrypoint.sh"]
+
+USER root
+
+COPY files/entrypoint.sh /opt/entrypoint.sh
+COPY files/cmd.sh /opt/cmd.sh
+
+ENTRYPOINT [ "sh", "/opt/entrypoint.sh" ]
+CMD ["/opt/cmd.sh"]
